@@ -3,37 +3,24 @@ import Form from "../components/Form";
 import Layout from "../components/Layout";
 import Table from "../components/Table";
 import Customer from "../core/Customer";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { userInfo } from "os";
+import CustomerRepository from "../core/CustomerRepository";
+import CustomerCollecion from "../backend/db/CustomerColection";
+import useCustomers from "../hooks/useCustomers";
 
 export default function Home() {
 
-  const [displayMode, setDisplayMode] = useState<'table' | 'form'>('table')
-  const [customer, setCustomer] = useState<Customer>(Customer.empty())
-
-  const customers = [
-    new Customer('Everton', 32, '1'),
-    new Customer('Emily', 21, '2'),
-    new Customer('Gabriel', 34, '3')
-  ]
-
-  function customerSelected(customer) {
-    setCustomer(customer)
-    setDisplayMode('form')
-  }
-
-  function customerDeleted(customer) {
-    console.log(`Deleting... ${customer.name}`)
-  }
-
-  function newCustomer() {
-    setCustomer(Customer.empty())
-    setDisplayMode('form')
-  }
-  function saveCustomer(customer) {
-    console.log(customer)
-    setDisplayMode('table')
-  }
+  const {
+    customer,
+    customers,
+    selectCustomer,
+    deleteCustomer,
+    saveCustomer,
+    newCustomer,
+    displayTable,
+    tableIsVisible
+} = useCustomers()
 
   return (
     <div className={`
@@ -42,7 +29,7 @@ export default function Home() {
       text-white
     `}>
       <Layout title="Cadastro Simples">
-        {displayMode === 'table' ? (
+        {tableIsVisible ? (
           <>
             <div className="flex justify-end">
               <Button color="green" className="mb-4"
@@ -50,12 +37,12 @@ export default function Home() {
                 New Customer</Button>
             </div>
             <Table customers={customers}
-              customerSelected={customerSelected}
-              customerDeleted={customerDeleted}></Table>
+              customerSelected={selectCustomer}
+              customerDeleted={deleteCustomer}></Table>
           </>
         ) : (
           <Form customer={customer}
-            cancelled={() => setDisplayMode('table')}
+            cancelled={() => displayTable()}
             customerChanged={saveCustomer}
           />
         )}
