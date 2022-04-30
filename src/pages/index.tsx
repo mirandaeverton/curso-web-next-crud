@@ -1,3 +1,4 @@
+import Button from "../components/Button";
 import Layout from "../components/Layout";
 import Table from "../components/Table";
 import Customer from "../core/Customer";
@@ -17,7 +18,7 @@ export default function Home() {
   function customerDeleted (customer) {
     console.log(`Deleting... ${customer.name}`)
   }
-  
+
   return (
     <div className={`
       flex h-screen justify-center items-center
@@ -25,6 +26,9 @@ export default function Home() {
       text-white
     `}>
       <Layout title="Cadastro Simples">
+        <div className="flex justify-end">
+          <Button color="blue" className="mb-4">New Customer</Button>
+        </div>
         <Table customers={customers} 
         customerSelected={customerSelected}
         customerDeleted={customerDeleted}></Table>

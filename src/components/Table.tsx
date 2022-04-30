@@ -7,7 +7,7 @@ interface TableProps {
     customerDeleted?: (customer: Customer) => void
 }
 
-export default function Table(props) {
+export default function Table(props: TableProps) {
 
     const showActions = props.customerSelected || props.customerDeleted
 
