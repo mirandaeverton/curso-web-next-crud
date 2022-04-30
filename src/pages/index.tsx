@@ -1,6 +1,23 @@
 import Layout from "../components/Layout";
+import Table from "../components/Table";
+import Customer from "../core/Customer";
 
 export default function Home() {
+
+  const customers = [
+    new Customer('Everton', 32, '1'),
+    new Customer('Emily', 21, '2'),
+    new Customer('Gabriel', 34, '3')
+  ]
+
+  function customerSelected (customer) {
+    console.log(customer.name)
+  }
+  
+  function customerDeleted (customer) {
+    console.log(`Deleting... ${customer.name}`)
+  }
+  
   return (
     <div className={`
       flex h-screen justify-center items-center
@@ -8,7 +25,9 @@ export default function Home() {
       text-white
     `}>
       <Layout title="Cadastro Simples">
-        <span>Content</span>
+        <Table customers={customers} 
+        customerSelected={customerSelected}
+        customerDeleted={customerDeleted}></Table>
       </Layout>
     </div>
   )
