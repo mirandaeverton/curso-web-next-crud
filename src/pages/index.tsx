@@ -3,8 +3,13 @@ import Form from "../components/Form";
 import Layout from "../components/Layout";
 import Table from "../components/Table";
 import Customer from "../core/Customer";
+import { useState } from "react";
+import { userInfo } from "os";
 
 export default function Home() {
+
+  const [displayMode, setDisplayMode] = useState<'table' | 'form'>('table')
+  const [customer, setCustomer] = useState<Customer>(Customer.empty())
 
   const customers = [
     new Customer('Everton', 32, '1'),
@@ -12,12 +17,22 @@ export default function Home() {
     new Customer('Gabriel', 34, '3')
   ]
 
-  function customerSelected (customer) {
-    console.log(customer.name)
+  function customerSelected(customer) {
+    setCustomer(customer)
+    setDisplayMode('form')
   }
-  
-  function customerDeleted (customer) {
+
+  function customerDeleted(customer) {
     console.log(`Deleting... ${customer.name}`)
+  }
+
+  function newCustomer() {
+    setCustomer(Customer.empty())
+    setDisplayMode('form')
+  }
+  function saveCustomer(customer) {
+    console.log(customer)
+    setDisplayMode('table')
   }
 
   return (
@@ -27,13 +42,23 @@ export default function Home() {
       text-white
     `}>
       <Layout title="Cadastro Simples">
-        <div className="flex justify-end">
-          <Button color="blue" className="mb-4">New Customer</Button>
-        </div>
-        {/* <Table customers={customers} 
-        customerSelected={customerSelected}
-        customerDeleted={customerDeleted}></Table> */}
-        <Form customer={customers[0]}></Form>
+        {displayMode === 'table' ? (
+          <>
+            <div className="flex justify-end">
+              <Button color="green" className="mb-4"
+                onClick={() => newCustomer()}>
+                New Customer</Button>
+            </div>
+            <Table customers={customers}
+              customerSelected={customerSelected}
+              customerDeleted={customerDeleted}></Table>
+          </>
+        ) : (
+          <Form customer={customer}
+            cancelled={() => setDisplayMode('table')}
+            customerChanged={saveCustomer}
+          />
+        )}
       </Layout>
     </div>
   )
